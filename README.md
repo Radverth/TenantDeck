@@ -51,13 +51,9 @@ PowerShell 7 (`pwsh`) with the `ExchangeOnlineManagement` module must be on PATH
 
 ## Release
 
-Tag a version to ship:
+Every push to `main` releases automatically: `.github/workflows/release.yml` bumps the patch version (committing `chore: release vX.Y.Z` back to main and tagging it), runs a Windows + Linux build matrix, and attaches both installers plus the electron-updater manifests to a GitHub Release. Installed clients pick the new version up silently via electron-updater.
 
-```bash
-git tag v1.0.0 && git push --tags
-```
-
-`.github/workflows/release.yml` runs a Windows + Linux matrix, builds both installers, and attaches them (plus electron-updater manifests) to a GitHub Release. No Microsoft secrets exist in CI — the app is a public client.
+For a minor/major bump, run `npm version minor` (or `major`) locally and push — the workflow's patch bump then continues from there. No Microsoft secrets exist in CI — the app is a public client.
 
 ## GDAP roles required
 

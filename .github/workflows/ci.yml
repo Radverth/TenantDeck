@@ -1,8 +1,10 @@
 name: CI
 
+# Feature branches and PRs only — pushes to main go through release.yml,
+# which runs the same checks before building installers.
 on:
   push:
-    branches: ["**"]
+    branches-ignore: [main]
   pull_request:
 
 jobs:

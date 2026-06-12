@@ -442,6 +442,27 @@ export interface SearchResult {
   subtitle: string;
 }
 
+// ---------------------------------------------------------------------------
+// Auto-update
+// ---------------------------------------------------------------------------
+
+export type UpdateState =
+  | "idle"
+  | "checking"
+  | "available"
+  | "downloading"
+  | "downloaded"
+  | "upToDate"
+  | "error"
+  | "unsupported";
+
+export interface UpdateStatus {
+  state: UpdateState;
+  currentVersion: string;
+  availableVersion: string | null;
+  message: string | null;
+}
+
 export interface AppSettings {
   clientId: string;
   partnerTenantId: string | null;

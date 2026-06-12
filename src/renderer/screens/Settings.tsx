@@ -1,7 +1,26 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { invoke } from "../api";
-import type { AppSettings } from "@shared/types";
+import type { AppSettings, UpdateStatus } from "@shared/types";
+
+function updateStatusText(s: UpdateStatus): string {
+  switch (s.state) {
+    case "checking":
+      return "Checking…";
+    case "downloading":
+      return "Update found — downloading in the background.";
+    case "downloaded":
+      return "Update downloaded — restart to apply.";
+    case "upToDate":
+      return `Up to date (v${s.currentVersion}).`;
+    case "unsupported":
+      return s.message ?? "Updates run in installed builds only.";
+    case "error":
+      return `Update check failed: ${s.message ?? "unknown error"}`;
+    default:
+      return "";
+  }
+}
 
 export default function Settings(): ReactNode {
   const queryClient = useQueryClient();
@@ -22,6 +41,10 @@ export default function Settings(): ReactNode {
 
   const purge = useMutation({
     mutationFn: () => invoke("registry:purgeData", { tenantIds: null }),
+  });
+
+  const checkUpdates = useMutation({
+    mutationFn: () => invoke("update:check", undefined),
   });
 
   if (!form) return <p className="muted">Loading…</p>;
@@ -95,6 +118,18 @@ export default function Settings(): ReactNode {
           Save settings
         </button>
         {save.isSuccess && <span className="chip pass">Saved</span>}
+      </div>
+
+      <h2>Updates</h2>
+      <div className="toolbar">
+        <button
+          className="btn"
+          onClick={() => checkUpdates.mutate()}
+          disabled={checkUpdates.isPending}
+        >
+          {checkUpdates.isPending ? "Checking…" : "Check for updates"}
+        </button>
+        {checkUpdates.data && <span className="muted">{updateStatusText(checkUpdates.data)}</span>}
       </div>
 
       <h2>Data hygiene</h2>

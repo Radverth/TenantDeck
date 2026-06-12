@@ -13,6 +13,7 @@ import Domains from "./screens/Domains";
 import Exchange from "./screens/Exchange";
 import Reports from "./screens/Reports";
 import Settings from "./screens/Settings";
+import UpdateModal from "./components/UpdateModal";
 
 const SCREENS = [
   { id: "dashboard", label: "Dashboard", component: Dashboard },
@@ -129,6 +130,7 @@ export default function App(): ReactNode {
           <Active />
         </div>
       </div>
+      <UpdateModal />
     </>
   );
 }

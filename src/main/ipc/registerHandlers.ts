@@ -40,6 +40,7 @@ import {
   validateRows,
 } from "../exo/connectorService";
 import { listTemplates, saveTemplate } from "../exo/templates";
+import { updaterService } from "../updater";
 
 type Handler<C extends IpcChannel> = (
   req: IpcContract[C]["req"],
@@ -115,6 +116,10 @@ export function registerIpcHandlers(): void {
     return merged;
   });
 
+  // Auto-update
+  handle("update:check", () => updaterService.check());
+  handle("update:install", () => updaterService.install());
+
   // Export
   handle("export:csv", async ({ filename, headers, rows }) => {
     const win = BrowserWindow.getFocusedWindow();
@@ -132,7 +137,8 @@ export function registerIpcHandlers(): void {
     return { savedTo: result.filePath };
   });
 
-  // Push sync progress and auth changes to all windows.
+  // Push sync progress, auth changes and update status to all windows.
   syncEngine.onProgress((e) => broadcast("event:syncProgress", e));
   authService.onChange((s) => broadcast("event:authChanged", s));
+  updaterService.onChange((s) => broadcast("event:updateStatus", s));
 }

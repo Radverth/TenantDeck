@@ -254,6 +254,24 @@ pre.ps {
   z-index: 50;
 }
 .search-results .row { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 16, 28, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--amber);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  width: 360px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
 .empty {
   padding: 48px;
   text-align: center;

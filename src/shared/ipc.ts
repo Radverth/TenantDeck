@@ -23,6 +23,7 @@ import type {
   TenantRecord,
   TenantScore,
   TenantSyncStatus,
+  UpdateStatus,
   UserRow,
 } from "./types";
 
@@ -105,6 +106,10 @@ export interface IpcContract {
   "settings:get": { req: void; res: AppSettings };
   "settings:set": { req: { settings: Partial<AppSettings> }; res: AppSettings };
 
+  // Auto-update
+  "update:check": { req: void; res: UpdateStatus };
+  "update:install": { req: void; res: void };
+
   // Export
   "export:csv": {
     req: { filename: string; headers: string[]; rows: (string | number | boolean | null)[][] };
@@ -120,6 +125,7 @@ export type IpcResponse<C extends IpcChannel> = IpcContract[C]["res"];
 export interface IpcEvents {
   "event:syncProgress": SyncProgressEvent;
   "event:authChanged": AuthStatus;
+  "event:updateStatus": UpdateStatus;
 }
 
 export type IpcEventChannel = keyof IpcEvents;
